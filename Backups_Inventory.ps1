@@ -13,9 +13,12 @@
 
 
 #Emplacement de sauvegarde du CSV Final:
-$output_csv = 'c:\Veeam_backup\Listing.csv'
-$commentaire = "First Veeam Backup Server"
+$output_csv = 'C:\Users\adm-lme\Desktop\Powershell_scripts\data.csv'
+$commentaire = "Veeam OnPremise"
 
+
+#language recovery
+$culture = Get-Culture
 
 #Recuperation des backups
 $backups = Get-VBRBackup
@@ -37,8 +40,33 @@ foreach ($backup in $backups) {
     #Recupération du nom du Serveur / VM
     $col2 = $increment.Name
     
-    #Recupération de la date de Backup
-    $col3 = $increment.CreationTime
+    #Traitement si dates US en format d'heure AM/PM
+    if ($culture -eq "us-US") {
+        #Convertion de la valeur en String
+        $date_us = $increment.CreationTime
+        $date_us = $date_us.ToString()
+        
+        #Decoupage avec le delimiteur " "
+        $split_result = $date_us.Split(" ")
+        
+        #Tranformation de l'heure en format classique (sans AM ou PM)
+        $time =  $split_result[1] + " " + $split_result[2]
+        $time = ([dateTime]$time.Split('-')[0]).ToString('HH:mm:ss')
+
+        #Transformation de la date en format FR
+        $date_fr = ([dateTime]$split_result[0]).ToString('dd/MM/yyyy')
+        
+        #Nouvelle date en format FR et 24H
+        $new_date = $date_fr + " " + $time
+    
+    #Date convertie en format 24H
+    $col3=$new_date
+    }
+    else {
+        #Recupération de la date de Backup
+        $col3 = $increment.CreationTime
+    }
+    
     
     #Recupération du type de backup
     $col4 = $increment.Type
