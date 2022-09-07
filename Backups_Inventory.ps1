@@ -13,8 +13,8 @@
 
 
 #Emplacement de sauvegarde du CSV Final:
-$output_csv = 'C:\Users\adm-lme\Desktop\Powershell_scripts\data.csv'
-$commentaire = "Veeam OnPremise"
+$output_csv = 'c:\Veeam_backup\Listing.csv'
+$commentaire = "First Veeam Backup Server"
 
 
 #Recuperation des backups
