@@ -13,8 +13,8 @@
 
 
 #Emplacement de sauvegarde du CSV Final:
-$output_csv = 'C:\Users\adm-lme\Desktop\Powershell_scripts\data.csv'
-$commentaire = "Veeam OnPremise"
+$output_csv = 'C:\Users\adm-lme\Desktop\Powershell\data_test.csv'
+$commentaire = "Veeam Azure"
 
 
 #language recovery
@@ -41,7 +41,17 @@ foreach ($backup in $backups) {
     $col2 = $increment.Name
     
     #Traitement si dates US en format d'heure AM/PM
-    if ($culture -eq "us-US") {
+
+        #Convertion de la valeur en String
+        $date_us = $increment.CreationTime
+        $date_us = $date_us.ToString()
+        
+        #Decoupage avec le delimiteur " "
+        $split_result = $date_us.Split(" ")
+
+
+    #Test si format US
+    if ($split_result[2] -like "AM" -or $split_result[2] -like "PM") {
         #Convertion de la valeur en String
         $date_us = $increment.CreationTime
         $date_us = $date_us.ToString()
