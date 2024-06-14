@@ -1,20 +1,22 @@
 #########################################################################################
-#  Auteur :                  Laurent MESSIER
-#  Dernière modification :   07/09/2022
+#  Author: Laurent MESSIER
+# Last modification: 07/09/2022
 #
-#  Utilisation :
+#  Use :
 #
-#  Renseigner la variable $output_csv pour designer le fichier de sortie de l'extraction
-#  Renseigner la variable $commentaire : ex. "Veeam OnPrime"
+# Enter the $output_csv variable to designate the extraction output file
+# Enter the $comment variable: ex. “Veeam OnPrime”
 #
-#  Lancer le script depuis le serveur Veeam
+# Run the script from the Veeam server
 #
 #########################################################################################
 
+Param(
+    [Parameter(Mandatory = $true, ValueFromPipeline = $true)]$Output_Csv
 
-#Emplacement de sauvegarde du CSV Final:
-$output_csv = 'C:\Users\adm-lme\Desktop\Powershell\data_test.csv'
-$commentaire = "Veeam Azure"
+	)
+
+$comment = "Veeam Azure"
 
 
 #language recovery
@@ -91,13 +93,15 @@ foreach ($backup in $backups) {
             $col5 = "KO"
         }
     
-    #Ajout du commentaire
-    $col6 = $commentaire
+    #Added comment
+    $col6 = $comment
 
     #insertion de la ligne dans le tableau
     $backuplist += [pscustomobject]@{Backup_Job=$col1;VM_Name=$col2;CreationTime=$col3;Type=$col4;Status=$col5;Storage=$col6}
     }
 }
 
-#Export du tableau en CSV
+English
+
+#Export of the table in CSV
 $backuplist | Sort-Object -Property VM_Name, CreationTime | Export-Csv -Path $output_csv -NoTypeInformation -Force
